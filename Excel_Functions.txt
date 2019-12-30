@@ -1,0 +1,299 @@
+package org.test.baseclass;
+
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+
+public class BaseClass {
+
+	//Global variable
+		static WebDriver driver;
+		static JavascriptExecutor js;
+		static Alert alerts;
+		static TakesScreenshot tss;
+		static Actions ac;
+		static Select st;
+		static Robot rbt;
+		
+		//launchChrome
+		public static void launchChrome() {
+			System.setProperty("webdriver.chrome.driver", "E:\\Stubhub\\Stubhub\\Stubhub\\Driver\\chromedriver.exe");
+			driver = new ChromeDriver();
+		}
+		
+		public static void launchFirefox() {
+			System.setProperty("webdriver.gecko.driver", "E:\\Selenium\\Testing\\BaseClass\\driver\\geckodriver.exe");
+			driver =  new FirefoxDriver();
+		}
+		public static void launchIE() {
+			System.setProperty("webdriver.ie.driver", "E:\\Selenium\\Testing\\BaseClass\\driver\\IEDriverServer.exe");
+			driver = new InternetExplorerDriver();
+		}
+		
+		//get
+		public static void getsite(String url) {
+			driver.get(url);
+		}
+		//gettitle
+		public static void getSiteTitle() {
+		     String sitetitle = driver.getTitle();
+		     System.out.println(sitetitle);
+		}
+		//currenturl
+		public static void currentUrl() {
+			 String cl = driver.getCurrentUrl();
+			 System.out.println(cl);
+		}
+		//Window Maximize
+		public static void windowMaximize() {
+			driver.manage().window().maximize();
+		}
+		//Window Fullscreen
+		public static void windowfullscreen() {
+			driver.manage().window().fullscreen();
+		}
+		//button,radiobutton
+		public static void clickbuton(WebElement btn) {
+			clickbuton(btn);
+		}
+		
+		//Fill
+		public static void fill(WebElement w,String s) {
+		   w.sendKeys(s);
+		}
+		
+		//close
+		public static void WindowClose() {
+			driver.close();
+		}
+		//Quit
+		public static void WindowQuit() {
+			driver.quit();
+		}
+		
+		//findWebelementid
+		public static WebElement findWebelementid(String x) {
+			WebElement fe = driver.findElement(By.id(x));
+			return fe;
+		}
+		//findWebelement by Classname
+		public static WebElement findWebelementclass(String x) {
+			WebElement fe = driver.findElement(By.className(x));
+			return fe;
+		}
+		
+		//FindWebElement by name
+		public static WebElement findWebelementbyname(String x) {
+			WebElement fe = driver.findElement(By.name(x));
+			return fe;
+		}
+		//Xpath
+		public static WebElement xpath(String x) {
+			WebElement fe = driver.findElement(By.xpath(x));
+			return fe;
+		}
+		
+		//JavascriptExecutor
+		public static void javaSEInsert(String Val, WebElement loc) {
+			js = (JavascriptExecutor)driver;
+			js.executeScript("arguments[0].setAttribute('value','"+ Val +"')",loc );
+		}
+		//JavascriptExecutor Click	
+		public static void javaSEClick(WebElement loc) {
+			js= (JavascriptExecutor)driver;
+			js.executeScript("arguments[0].click()",loc);
+		}
+		//JavascriptExecutor--ScrollDown
+		public static void scrollDown(WebElement sd) {
+			 js =(JavascriptExecutor)driver;
+			 js.executeScript("arguments[0].scrollIntoView(true)", sd);
+		}
+		//JavascriptExecutor--ScrollUp
+		public static void scrollUp(WebElement sup) {
+			js =(JavascriptExecutor)driver;
+			js.executeScript("arguments[0].scrollIntoView(false)", sup);
+		}
+		//JavascriptExecutor--scrolldowntoup
+		public static void scrolldowntoup(WebElement sd, WebElement sup) throws InterruptedException {
+			js = (JavascriptExecutor)driver;
+			js.executeScript("arguments[0].scrollIntoView(true)", sd);
+			Thread.sleep(3000);
+			js.executeScript("arguments[0].scrollIntoView(false)", sup);
+		}
+		//JavascriptExecutor--scrolluptodown
+		public static void scrolluptodown(WebElement sup,WebElement sd) throws InterruptedException {
+			js =(JavascriptExecutor)driver;
+			js.executeScript("arguments[0].scrollIntoView(false)", sup);
+			Thread.sleep(3000);
+			js.executeScript("arguments[0].scrollIntoView(ture)", sd);
+		}
+		
+		//JavascriptExecutor get Attribute
+		public static void javaSEAttribute(WebElement loc) {
+			 js =(JavascriptExecutor)driver;
+			 Object obj = js.executeScript("return arguments[0].getAttribute('Value')",loc);
+			 String result =(String)obj;
+			 System.out.println(result);
+			 
+		}
+
+		//Gettext
+		public static void gText(WebElement w) {
+			String txt = w.getText();
+			System.out.println(txt);
+		}
+		//Getattri------Not working
+		public static String gAttribute(WebElement w) {
+			String gattrib = w.getAttribute("Value");
+			System.out.println(gattrib);
+			//System.out.println(w.getAttribute("Value"));
+			return gattrib;
+		}
+		
+		//SimpleAlert
+		public static void simpleAlert() {
+			alerts =driver.switchTo().alert();
+			alerts.accept();
+		}
+		//ConfirmAlert
+		public static void confirmAlert() {
+			alerts =driver.switchTo().alert();
+			alerts.accept();
+			alerts.dismiss();	
+		}
+		//TakesScreenShot
+		public static void captureScreen(String filepath) throws IOException {
+			tss=(TakesScreenshot)driver;
+			File sourcefile= tss.getScreenshotAs(OutputType.FILE);
+			System.out.println(sourcefile);
+			File destination  = new File(filepath);
+			FileUtils.copyFile(sourcefile, destination);
+			System.out.println(destination);
+		}
+		
+		//iframe tagname
+		public static void itagname(String tagname) {
+			List<WebElement> tags = driver.findElements(By.tagName(tagname));
+			int size = tags.size();
+			System.out.println(size);
+		}
+		//webelement
+		public static void frameWebelement(WebElement w) {
+			driver.switchTo().frame(w);
+		}
+		//id
+		public static void frameID(String id) {
+			driver.switchTo().frame(id);
+		}
+		//name
+		public static void frameName(String name) {
+			driver.switchTo().frame(name);
+		}
+		
+		//Actions-MovetToelement
+		public static void acMoveToElement(WebElement action) {
+			 ac = new Actions(driver);
+			 ac.moveToElement(action).perform();
+		}
+		//Double Click
+		public static void acDoubleClick(WebElement action) {
+			ac = new Actions(driver);
+			ac.doubleClick(action).perform();
+		}
+		
+		//ContextClick or RightClick
+		public static void acContextClick(WebElement action) {
+			ac = new Actions(driver);
+			ac.contextClick(action).perform();
+		}
+		
+		//DragandDropPerform
+		public static void acDragandDropPerform(WebElement src, WebElement desc) {
+			ac = new Actions(driver);
+			ac.dragAndDrop(src, desc).perform();
+		}
+		//DragandDropBuild
+		public static void acDragandDropBuild(WebElement src, WebElement desc) {
+			 ac = new Actions(driver);
+			 ac.dragAndDrop(src, desc).build().perform();
+		}
+		//SelectByIndex
+		public static void selectbyindex(WebElement s,int n) {
+		    st = new Select(s);
+			st.selectByIndex(n);	
+		}
+		
+		//selected by value
+		public static void selectbyvalue(WebElement s, String v) {
+			st = new Select(s);
+			st.selectByValue(v);
+		}
+		//selected by visibleText
+		public static void selectbyVisibletext(WebElement s, String v) {
+			st = new Select(s);
+			st.selectByVisibleText(v);
+		}
+		//getallOption
+		public static void getalloption(WebElement s) {
+			st = new Select(s);
+			List<WebElement> los = st.getOptions();
+			for (WebElement gaos : los) {
+				String al = gaos.getAttribute("value");
+				System.out.println(al);
+			}
+		}
+		//RobotusingPrint
+		public static void rbtPrint() throws AWTException {
+			rbt = new Robot();
+			rbt.keyPress(KeyEvent.VK_CONTROL);
+			rbt.keyPress(KeyEvent.VK_P);
+			rbt.keyRelease(KeyEvent.VK_CONTROL);
+			rbt.keyRelease(KeyEvent.VK_P);
+		}	
+		//RobotusingSave
+		public static void rbtSave() throws AWTException {
+			rbt = new Robot();
+			rbt.keyPress(KeyEvent.VK_CONTROL);
+			rbt.keyPress(KeyEvent.VK_S);
+			rbt.keyRelease(KeyEvent.VK_CONTROL);
+			rbt.keyRelease(KeyEvent.VK_S);
+		}	
+		//RobotusingView Pagesource
+		public static void rbtViewPS() throws AWTException {
+			rbt = new Robot();
+			rbt.keyPress(KeyEvent.VK_CONTROL);
+			rbt.keyPress(KeyEvent.VK_U);
+			rbt.keyRelease(KeyEvent.VK_CONTROL);
+			rbt.keyRelease(KeyEvent.VK_U);
+		}	
+		//Robot using back
+		public static void rbtBack() throws AWTException {
+			rbt = new Robot();
+			rbt.keyPress(KeyEvent.VK_ALT);
+			rbt.keyPress(KeyEvent.VK_LEFT);
+			rbt.keyRelease(KeyEvent.VK_LEFT);
+			rbt.keyRelease(KeyEvent.VK_ALT);
+		}		
+
+
+	
+	
+	
+}
